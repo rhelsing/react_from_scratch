@@ -17,7 +17,11 @@ class App extends Component {
       selectedVideo: null
     }
 
-    YTSearch({key: API_KEY, term: 'ryan helsing'}, videos => {
+    this.videoSearch('ryan helsing')
+  }
+
+  videoSearch(term) {
+    YTSearch({key: API_KEY, term: term}, videos => {
       this.setState({ videos: videos, selectedVideo: videos[0] }) //could use {videos } because same key
     })
   }
@@ -25,11 +29,13 @@ class App extends Component {
   render() {
     return (
       <div>
-        <SearchBar />
+        <SearchBar onSearch={term => this.videoSearch(term)} />
         <VideoDetail video={this.state.selectedVideo} />
-        <VideoList videos={this.state.videos} />
+        <VideoList
+          onVideoSelect={v => this.setState({selectedVideo: v}) }
+          videos={this.state.videos} />
       </div>
-      )
+      )//passing callbacks like onVideoSelect doesnt usually go more than one level
   }
 }
 //render to DOM
